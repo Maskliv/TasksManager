@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TasksManager.Domain.DTO;
+﻿using TasksManager.Domain.DTO;
 using TasksManager.Domain.Entities;
+using TasksManager.Domain.Exceptions;
 using TasksManager.Domain.Interfaces.BL;
 using TasksManager.Domain.Interfaces.Persistence;
+using TasksManager.Domain.Interfaces.Validations;
 
 namespace TasksManager.Application.BL
 {
     public class UserBL : IUserBL
     {
         private readonly IGenericRepository<User> _userRepo;
+        private readonly IUserValidation _userValidation;
 
-        public UserBL(IGenericRepository<User> userRepository)
+        public UserBL(IGenericRepository<User> userRepository, IUserValidation userValidation)
         {
             _userRepo = userRepository;
+            _userValidation = userValidation;
         }
 
         public Task<bool> ChangePassword(ChangePwdDto dataPwds)
@@ -26,7 +25,11 @@ namespace TasksManager.Application.BL
 
         public Task<User?> CreateAsync(UserDto newUser)
         {
-            throw new NotImplementedException(); 
+            _userValidation.ValidateRequiredFieldsUser(newUser);
+            _userValidation.ValidateEmail(newUser.email);
+            _userValidation.ValidatePasswordFormat(newUser.password ?? throw new ClientException("No se proporcionó contraseña"));
+
+
         }
 
         public Task<bool> DeleteByIdAsync(int id)

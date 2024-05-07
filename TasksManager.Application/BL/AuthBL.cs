@@ -25,20 +25,24 @@ namespace TasksManager.Application.BL
             _configuration = configuration;
         }
 
-        
-
         public async Task<string?> Login(LoginDto loginData)
         {
             //Validacion del usuario
             User? user = await _userBL.GetByUsernameAsync(loginData.username);
             if (user == null) return null;
-            if (!_userValidation.IsPasswordCorrect(user.Id, loginData.password)) 
+            if (!_userValidation.IsPasswordCorrect(loginData.password, user.Password)) 
                 return null;
 
             var token = GenerateToken(user.Id, user.Username, user.Role);
             return token;
 
         }
+
+        public Task<UserDto> CreateUser(LoginDto loginData)
+        {
+            
+        }
+
 
         private string? GenerateToken(int idUser, string username, string role)
         {
@@ -77,6 +81,7 @@ namespace TasksManager.Application.BL
             return token;
 
         }
+
     }
 
     internal class TokenModel

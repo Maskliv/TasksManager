@@ -9,10 +9,10 @@ namespace TasksManager.Domain.Interfaces.Validations
 {
     public interface IUserValidation
     {
-        bool IsPasswordCorrect(int idUser, string pwd);
-        void ValidateNewPasswordFormat(string newPwd);
-        void ValidateEmail(ref UserDto user);
-        void ValidateUserCreate(ref UserDto user);
+        bool IsPasswordCorrect(string pwdClient, string pwdHashed);
+        void ValidatePasswordFormat(string newPwd);
+        void ValidateEmail(string userEmail);
+        void ValidateRequiredFieldsUser(UserDto user);
         void ValidateUserUpdate(UserDto user);
 
     }
