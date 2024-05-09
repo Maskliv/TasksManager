@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TasksManager.Domain\TasksManager.Domain.csproj" />
     <ProjectReference Include="..\TasksManager.Persistence\TasksManager.Persistence.csproj" />
+    <ProjectReference Include="..\TasksManager.Application\TasksManager.Application.csproj" />
   </ItemGroup>
 
 </Project>

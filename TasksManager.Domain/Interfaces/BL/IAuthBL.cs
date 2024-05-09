@@ -10,6 +10,6 @@ namespace TasksManager.Domain.Interfaces.BL
     public interface IAuthBL
     {
         Task<string?> Login(LoginDto loginData);
-        Task<UserDto> CreateUser(LoginDto loginData);
+        Task<UserDto> SignUp(UserDto newUser);
     }
 }

@@ -17,6 +17,7 @@ namespace TasksManager.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbService(config);
+            builder.Services.AddAutoMapperConfig();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using TasksManager.Domain.DTO;
 using TasksManager.Domain.Entities;
 using TasksManager.Domain.Enum;
@@ -11,12 +12,14 @@ namespace TasksManager.Application.BL
 {
     public class UserBL : IUserBL
     {
+        private readonly IConfiguration _config;
         private readonly IGenericRepository<User> _userRepo;
         private readonly IUserValidation _userValidation;
         private readonly IMapper _mapper;
 
-        public UserBL(IGenericRepository<User> userRepository, IUserValidation userValidation, IMapper mapper)
+        public UserBL(IConfiguration config,IGenericRepository<User> userRepository, IUserValidation userValidation, IMapper mapper)
         {
+            _config = config;
             _userRepo = userRepository;
             _userValidation = userValidation;
             _mapper = mapper;
@@ -45,6 +48,9 @@ namespace TasksManager.Application.BL
             _userValidation.ValidatePasswordFormat(newUser.password ?? throw new ClientException("No se proporcionó contraseña"));
             
             var userToCreate = _mapper.Map<User>(newUser);
+            userToCreate.Password = newUser.password.GenerateHash(_config);
+            userToCreate.DateCreated = DateTime.Now;
+            userToCreate.DateUpdated = null;
 
             _userValidation.ValidateUniqueFields(userToCreate, await _userRepo.GetAllAsync());
 
@@ -58,6 +64,8 @@ namespace TasksManager.Application.BL
                 throw new ClientException("El usuario no existe");
             
             user.password = userPwd;
+            //No se puede crear un usuario con rol root desde la api solo puede haber 1 root en el sistema
+            user.role = user.role == ERole.Root.ToString() ?  ERole.User.ToString(): user.role;
 
             _userValidation.ValidateRequiredFieldsUser(user);
             _userValidation.ValidateEmail(user.email);
@@ -84,7 +92,7 @@ namespace TasksManager.Application.BL
 
             _userValidation.ValidatePasswordFormat(dataPwds.newPwd);
 
-            userToUpdate.Password = dataPwds.newPwd;
+            userToUpdate.Password = dataPwds.newPwd.GenerateHash(_config);
             
             var _ = await _userRepo.UpdateAsync(userToUpdate) ?? throw new ClientException("El usuario no existe");
 

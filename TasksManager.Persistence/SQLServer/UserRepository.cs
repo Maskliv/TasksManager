@@ -1,15 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TasksManager.Domain.Entities;
 using TasksManager.Domain.Interfaces.Persistence;
 
 namespace TasksManager.Persistence.SQLServer
 {
-    internal class UserRepository : IGenericRepository<User>
+    public class UserRepository : IGenericRepository<User>
     {
         private readonly ApplicationDbContext _context;
 

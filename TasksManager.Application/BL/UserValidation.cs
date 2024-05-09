@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using TasksManager.Domain.DTO;
 using TasksManager.Domain.Entities;
+using TasksManager.Domain.Enum;
 using TasksManager.Domain.Exceptions;
 using TasksManager.Domain.Interfaces.Validations;
 
@@ -53,17 +54,24 @@ namespace TasksManager.Application.BL
             }
             if (string.IsNullOrEmpty(user.role))
             {
+                
                 throw new ClientException("No se envió el rol del usuario");
             }
 
             try
             {
-                var num = Convert.ToInt64(user.phone);
+                    var role = (ERole)Enum.Parse(typeof(ERole),user.role);
+                    var num = Convert.ToInt64(user.phone);
+            }
+            catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
+            {
+                throw new ClientException("No se envió un rol de usuario válido");
             }
             catch (FormatException)
             {
                 throw new ClientException("No se proporcionó un número de teléfono válido");
             }
+            
 
         }
 

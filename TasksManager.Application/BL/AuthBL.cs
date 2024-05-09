@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TasksManager.Domain.DTO;
 using TasksManager.Domain.Entities;
+using TasksManager.Domain.Enum;
 using TasksManager.Domain.Interfaces.BL;
 using TasksManager.Domain.Interfaces.Validations;
 using TasksManager.Domain.Variables;
@@ -16,18 +18,19 @@ namespace TasksManager.Application.BL
         private readonly IUserBL _userBL;
         private readonly IUserValidation _userValidation;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AuthBL(IUserBL userBL, IUserValidation userValidation, IConfiguration configuration)
+        public AuthBL(IUserBL userBL, IUserValidation userValidation, IConfiguration configuration, IMapper mapper)
         {
 
             _userBL = userBL;
             _userValidation = userValidation;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task<string?> Login(LoginDto loginData)
         {
-            //Validacion del usuario
             User? user = await _userBL.GetByUsernameAsync(loginData.username);
             if (user == null) return null;
             if (!_userValidation.IsPasswordCorrect(loginData.password, user.Password)) 
@@ -38,9 +41,14 @@ namespace TasksManager.Application.BL
 
         }
 
-        public Task<UserDto> CreateUser(LoginDto loginData)
+        public async Task<UserDto> SignUp(UserDto newUser)
         {
-            throw new NotImplementedException();
+            //En un registro solo se puede crear usuarios con permisos basicos
+            //Los roles admin solo se pueden crear con el usuario root
+            newUser.role = ERole.User.ToString();
+            var userCreatedDto = _mapper.Map<UserDto>(await _userBL.CreateAsync(newUser));
+            userCreatedDto.password = null;
+            return userCreatedDto;
         }
 
 
