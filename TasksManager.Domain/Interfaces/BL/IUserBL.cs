@@ -8,8 +8,8 @@ namespace TasksManager.Domain.Interfaces.BL
         Task<User?> GetByIdAsync(int id);
         Task<User?> GetByUsernameAsync(string userName);
         Task<List<User>?> GetAllAsync();
-        Task<User?> CreateAsync(UserDto newUser);
-        Task<User?> UpdateAsync(UserDto user);
+        Task<User> CreateAsync(UserDto newUser);
+        Task<User> UpdateAsync(UserDto user);
         Task<bool> ChangePassword(ChangePwdDto dataPwds);
         Task<bool> DeleteByIdAsync(int id);
     }

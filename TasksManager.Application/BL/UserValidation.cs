@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 using TasksManager.Domain.DTO;
+using TasksManager.Domain.Entities;
 using TasksManager.Domain.Exceptions;
 using TasksManager.Domain.Interfaces.Validations;
 
@@ -64,6 +65,21 @@ namespace TasksManager.Application.BL
                 throw new ClientException("No se proporcionó un número de teléfono válido");
             }
 
+        }
+
+        public void ValidateUniqueFields(User user, List<User> users)
+        {
+            if (users.Any(u => u.Username == user.Username && u.Id != user.Id))
+            {
+                throw new ClientException("El nombre de usuario ya existe");
+            }
+
+            if (users.Any(u => u.Email == user.Email && u.Id != user.Id))
+            {
+                throw new ClientException("El email ya existe");
+            }
+
+            
         }
 
         public void ValidateUserUpdate(UserDto user)

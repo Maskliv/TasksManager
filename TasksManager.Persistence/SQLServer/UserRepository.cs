@@ -17,27 +17,28 @@ namespace TasksManager.Persistence.SQLServer
         {
             _context = context;
         }
+
         public async Task<User?> GetByIdAsync(int id)
         {
             return await _context.Users.FindAsync(id);
         }
+
         public async Task<List<User>> GetAllAsync()
         {
             return await _context.Users.ToListAsync();
         }
 
-
-        public async Task<User?> CreateAsync(User newUser)
+        public async Task<User> CreateAsync(User newUser)
         {
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
             return newUser;
         }
 
-        public async Task<bool> UpdateAsync(User user)
+        public async Task<User?> UpdateAsync(User user)
         {
             var existingUser = await _context.Users.FindAsync(user.Id);
-            if (existingUser == null) return false;
+            if (existingUser == null) return null;
 
             existingUser.Username = user.Username;
             existingUser.Role = user.Role;
@@ -49,8 +50,9 @@ namespace TasksManager.Persistence.SQLServer
             existingUser.DateUpdated = DateTime.Now;
 
             await _context.SaveChangesAsync();
-            return true;
+            return existingUser;
         }
+
         public async Task<bool> DeleteByIdAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);

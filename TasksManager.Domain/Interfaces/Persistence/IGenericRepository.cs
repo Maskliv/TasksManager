@@ -10,8 +10,8 @@ namespace TasksManager.Domain.Interfaces.Persistence
     {
         Task<List<T>> GetAllAsync();
         Task<T?> GetByIdAsync(int id);
-        Task<T?> CreateAsync(T newEntry);
-        Task<bool> UpdateAsync(T entry);
+        Task<T> CreateAsync(T newEntry);
+        Task<T?> UpdateAsync(T entry);
         Task<bool> DeleteByIdAsync(int id);
     }
 }

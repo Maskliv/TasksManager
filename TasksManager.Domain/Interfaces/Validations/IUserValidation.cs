@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TasksManager.Domain.DTO;
+using TasksManager.Domain.Entities;
 
 namespace TasksManager.Domain.Interfaces.Validations
 {
@@ -14,6 +15,8 @@ namespace TasksManager.Domain.Interfaces.Validations
         void ValidateEmail(string userEmail);
         void ValidateRequiredFieldsUser(UserDto user);
         void ValidateUserUpdate(UserDto user);
+
+        void ValidateUniqueFields(User user, List<User> users);
 
     }
 }

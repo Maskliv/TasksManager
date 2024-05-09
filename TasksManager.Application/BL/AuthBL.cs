@@ -40,7 +40,7 @@ namespace TasksManager.Application.BL
 
         public Task<UserDto> CreateUser(LoginDto loginData)
         {
-            
+            throw new NotImplementedException();
         }
 
 
