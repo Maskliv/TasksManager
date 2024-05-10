@@ -91,7 +91,7 @@ namespace TasksManager.API.Middleware
                     statusCode: context.Response.StatusCode,
                     message: ServiceMessages.ERROR,
                     response: null, 
-                    errorDescription: ex.StackTrace
+                    errorDescription: $"{ex.Message} - {ex.StackTrace}"
                 ).ToString());
         }
 
