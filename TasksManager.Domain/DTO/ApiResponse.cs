@@ -4,31 +4,19 @@ namespace TasksManager.Domain.DTO
 {
     public class ApiResponse<T>
     {
-        #region Properties
-        public int StatusCode { get; set; }
-        public string? ErrorDescription { get; set; }
-        public string Message { get; set; }
-        public T Data { get; set; }
+        public int statusCode { get; set; }
+        public string? errorDescription { get; set; }
+        public string message { get; set; }
+        public T data { get; set; }
 
-        #endregion Properties
-
-        #region Constructor
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="statusCode"></param>
-        /// <param name="message"></param>
-        /// <param name="response"></param>
-        public ApiResponse(int statusCode, string message, T response, string? ErrorDescription = null)
+        public ApiResponse(int statusCode, string message, T response, string? errorDescription = null)
         {
-            this.StatusCode = statusCode;
-            this.Message = message;
-            this.Data = response;
-            this.ErrorDescription = ErrorDescription;
+            this.statusCode = statusCode;
+            this.message = message;
+            data = response;
+            this.errorDescription = errorDescription;
         }
 
-        #endregion Constructor
 
         public override string ToString()
         {

@@ -12,13 +12,17 @@ namespace TasksManager.API
             IConfiguration config = builder.Configuration.AddJsonFile("appsettings.json").Build();
             // Add services to the container.
 
+            builder.Services.AddCorsDocumentation();
             builder.Services.AddControllers();
             builder.Services.AddDependenciesInjectionConfig();
+            builder.Services.AddJwtConfig(config);
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerConfig();
             builder.Services.AddDbService(config);
             builder.Services.AddAutoMapperConfig();
             var app = builder.Build();
+
+            app.UseCorsDocumentation();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -29,9 +33,12 @@ namespace TasksManager.API
 
             app.UseHttpsRedirection();
 
+            //Middlewares
+            app.UseExceptionMiddleware();
+            app.UseJwtConfig();
             app.UseAuthorization();
+            
             app.MapControllers();
-
             app.Run();
         }
     }

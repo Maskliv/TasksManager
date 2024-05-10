@@ -25,8 +25,7 @@ namespace TasksManager.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto loginData)
         {
             var token = await _authBL.Login(loginData);
-            if (token == null)
-                return await GetResponseAsync<string?>(HttpStatusCode.BadRequest, "Usuario y/o contraseña incorrecto", null);
+            if (token == null) throw new ClientException("Usuario y/o contraseña incorrecto");
             return await GetResponseAsync(HttpStatusCode.OK, "Sesión iniciada correctamente", token);
         }
 
@@ -35,17 +34,8 @@ namespace TasksManager.API.Controllers
         [Route("SignUp")]
         public async Task<IActionResult> SignUp([FromBody] UserDto newUser)
         {
-            try 
-            {
-                var userCreatedDto = await _authBL.SignUp(newUser);
-                return await GetResponseAsync(HttpStatusCode.OK, "Usuario creado correctamente", userCreatedDto);
-
-            }
-            catch(ClientException ex){
-                return await GetResponseAsync<string?>(HttpStatusCode.BadRequest, ex.Message, null, ex.Message);
-            }            
-            
-            
+            var userCreatedDto = await _authBL.SignUp(newUser);
+            return await GetResponseAsync(HttpStatusCode.OK, "Usuario creado correctamente", userCreatedDto);       
         }
     }
 }
