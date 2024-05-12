@@ -45,7 +45,7 @@ namespace TasksManager.Application.BL
         {
             _userValidation.ValidateRequiredFieldsUser(newUser);
             _userValidation.ValidateEmail(newUser.email);
-            _userValidation.ValidatePasswordFormat(newUser.password ?? throw new ClientException("No se proporcionó contraseña"));
+            _userValidation.ValidatePasswordFormat(newUser.password ?? throw new BadRequestException("No se proporcionó contraseña"));
             
             var userToCreate = _mapper.Map<User>(newUser);
             userToCreate.Password = newUser.password.GenerateHash(_config);
@@ -61,7 +61,7 @@ namespace TasksManager.Application.BL
         {
             var userPwd = (await _userRepo.GetByIdAsync(user.id))?.Password;
             if (userPwd == null)
-                throw new ClientException("El usuario no existe");
+                throw new NotFoundException("El usuario no existe");
             
             user.password = userPwd;
             //No se puede crear un usuario con rol root desde la api solo puede haber 1 root en el sistema
@@ -74,7 +74,7 @@ namespace TasksManager.Application.BL
 
             _userValidation.ValidateUniqueFields(userToUpdate, await _userRepo.GetAllAsync());
 
-            return await _userRepo.UpdateAsync(userToUpdate)?? throw new ClientException("El usuario no existe");
+            return await _userRepo.UpdateAsync(userToUpdate)?? throw new NotFoundException("El usuario no existe");
 
         }
 
@@ -83,18 +83,18 @@ namespace TasksManager.Application.BL
             var userToUpdate = await _userRepo.GetByIdAsync(dataPwds.idUser);
 
             if (userToUpdate == null)
-                throw new ClientException("El usuario no existe");
+                throw new NotFoundException("El usuario no existe");
             
             if (!_userValidation.IsPasswordCorrect(dataPwds.oldPwd, userToUpdate.Password))
             {
-                throw new ClientException("La contraseña actual no es correcta");
+                throw new BadRequestException("La contraseña actual no es correcta");
             }
 
             _userValidation.ValidatePasswordFormat(dataPwds.newPwd);
 
             userToUpdate.Password = dataPwds.newPwd.GenerateHash(_config);
             
-            var _ = await _userRepo.UpdateAsync(userToUpdate) ?? throw new ClientException("El usuario no existe");
+            var _ = await _userRepo.UpdateAsync(userToUpdate) ?? throw new NotFoundException("El usuario no existe");
 
             return true;
         }
@@ -103,7 +103,7 @@ namespace TasksManager.Application.BL
         {
             var user = await _userRepo.GetByIdAsync(id);
             if (user == null) 
-                throw new ClientException("El usuario no existe");
+                throw new NotFoundException("El usuario no existe");
 
             return await _userRepo.DeleteByIdAsync(id);
         }

@@ -25,7 +25,7 @@ namespace TasksManager.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto loginData)
         {
             var token = await _authBL.Login(loginData);
-            if (token == null) throw new ClientException("Usuario y/o contraseña incorrecto");
+            if (token == null) throw new BadRequestException("Usuario y/o contraseña incorrecto");
             return await GetResponseAsync(HttpStatusCode.OK, "Sesión iniciada correctamente", token);
         }
 

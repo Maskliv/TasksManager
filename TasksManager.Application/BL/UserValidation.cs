@@ -25,37 +25,37 @@ namespace TasksManager.Application.BL
 
         public void ValidateEmail(string userEmail)
         {
-            if (string.IsNullOrEmpty(userEmail)) throw new ClientException("No se proporcionó email");
+            if (string.IsNullOrEmpty(userEmail)) throw new BadRequestException("No se proporcionó email");
             userEmail = userEmail.Trim();
             string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            if (!Regex.IsMatch(userEmail, pattern)) throw new ClientException("No se proporcionó email válido");
+            if (!Regex.IsMatch(userEmail, pattern)) throw new BadRequestException("No se proporcionó email válido");
         }
 
         public void ValidatePasswordFormat(string newPwd)
         {
             string pattern = @"^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()-_=+[\]{}|;:'"",.<>?/]).{8,}$";
-            if (!Regex.IsMatch(newPwd, pattern)) throw new ClientException("Las contraseña debe tener al menos 8 caracteres, un número, una mayúscula, una minúscula y un carácter especial.");
+            if (!Regex.IsMatch(newPwd, pattern)) throw new BadRequestException("Las contraseña debe tener al menos 8 caracteres, un número, una mayúscula, una minúscula y un carácter especial.");
         }
 
         public void ValidateRequiredFieldsUser(UserDto user)
         {
             if (string.IsNullOrEmpty(user.username))
             {
-                throw new ClientException("No se envió nombre de usuario");
+                throw new BadRequestException("No se envió nombre de usuario");
             }
             if (string.IsNullOrEmpty(user.password))
             {
-                throw new ClientException("No se envió la contraseña del usuario");
+                throw new BadRequestException("No se envió la contraseña del usuario");
             }
 
             if (string.IsNullOrEmpty(user.name))
             {
-                throw new ClientException("No se envió el nombre de usuario");
+                throw new BadRequestException("No se envió el nombre de usuario");
             }
             if (string.IsNullOrEmpty(user.role))
             {
                 
-                throw new ClientException("No se envió el rol del usuario");
+                throw new BadRequestException("No se envió el rol del usuario");
             }
 
             try
@@ -65,11 +65,11 @@ namespace TasksManager.Application.BL
             }
             catch (Exception ex) when (ex is ArgumentException || ex is InvalidOperationException)
             {
-                throw new ClientException("No se envió un rol de usuario válido");
+                throw new BadRequestException("No se envió un rol de usuario válido");
             }
             catch (FormatException)
             {
-                throw new ClientException("No se proporcionó un número de teléfono válido");
+                throw new BadRequestException("No se proporcionó un número de teléfono válido");
             }
             
 
@@ -79,12 +79,12 @@ namespace TasksManager.Application.BL
         {
             if (users.Any(u => u.Username == user.Username && u.Id != user.Id))
             {
-                throw new ClientException("El nombre de usuario ya existe");
+                throw new BadRequestException("El nombre de usuario ya existe");
             }
 
             if (users.Any(u => u.Email == user.Email && u.Id != user.Id))
             {
-                throw new ClientException("El email ya existe");
+                throw new BadRequestException("El email ya existe");
             }
 
             

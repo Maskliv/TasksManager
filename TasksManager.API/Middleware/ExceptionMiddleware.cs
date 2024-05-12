@@ -1,6 +1,4 @@
 using System.Net;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
 using TasksManager.Domain.DTO;
 using TasksManager.Domain.Exceptions;
 using TasksManager.Domain.Variables;
@@ -29,10 +27,6 @@ namespace TasksManager.API.Middleware
                     await _next(httpContext);
                 }
 
-            }
-            catch (ClientException ex)
-            {
-                await HandleClientExceptionAsync(httpContext, ex);
             }
             catch (Exception ex)
             {
@@ -86,25 +80,29 @@ namespace TasksManager.API.Middleware
         {
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            var message = ex.Message;
+            var errorDescription = ex.Message;
+
+            switch (ex)
+            {
+                case BadRequestException _:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
+                case NotFoundException _:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    break;
+                default:
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    message = ServiceMessages.ERROR;
+                    errorDescription = $"{ex.Message}\n{ex.StackTrace}";
+                    break;
+            }
+
             await context.Response.WriteAsync(new ApiResponse<object?>(
                     statusCode: context.Response.StatusCode,
-                    message: ServiceMessages.ERROR,
+                    message: message,
                     response: null, 
-                    errorDescription: ex.StackTrace
-                ).ToString());
-        }
-
-        private async Task HandleClientExceptionAsync(HttpContext context, ClientException ex)
-        {
-
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            await context.Response.WriteAsync(new ApiResponse<object?>(
-                    statusCode: context.Response.StatusCode,
-                    message: ex.Message,
-                    response: null, 
-                    errorDescription: ex.Message
+                    errorDescription: errorDescription
                 ).ToString());
         }
     }
