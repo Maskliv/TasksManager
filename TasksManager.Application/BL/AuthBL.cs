@@ -17,15 +17,15 @@ namespace TasksManager.Application.BL
     {
         private readonly IUserBL _userBL;
         private readonly IUserValidation _userValidation;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
-        public AuthBL(IUserBL userBL, IUserValidation userValidation, IConfiguration configuration, IMapper mapper)
+        public AuthBL(IUserBL userBL, IUserValidation userValidation, IConfiguration config, IMapper mapper)
         {
 
             _userBL = userBL;
             _userValidation = userValidation;
-            _configuration = configuration;
+            _config = config;
             _mapper = mapper;
         }
 
@@ -54,7 +54,7 @@ namespace TasksManager.Application.BL
 
         private string? GenerateToken(int idUser, string username, string role)
         {
-            SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(_configuration[AppSettingsKeys.JWT_SECRET] ?? throw new Exception("JWT Secret not setted yet.")));
+            SymmetricSecurityKey authSigningKey = new(Encoding.UTF8.GetBytes(_config[AppSettingsKeys.JWT_SECRET] ?? throw new Exception("JWT Secret not setted yet.")));
 
             var tokenData = new TokenModel
             {

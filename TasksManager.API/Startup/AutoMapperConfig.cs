@@ -15,7 +15,7 @@ namespace TasksManager.API.Startup
         
     }
 
-    internal class MappingProfile : Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {

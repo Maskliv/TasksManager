@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TasksManager.Domain", "Task
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TasksManager.Persistence", "TasksManager.Persistence\TasksManager.Persistence.csproj", "{15D6B984-5DA5-4E69-93B3-4A0A473755CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TasksManager.Tests", "TasksManager.Tests\TasksManager.Tests.csproj", "{608EA62D-C4AF-406B-9A9E-302875C904A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{15D6B984-5DA5-4E69-93B3-4A0A473755CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15D6B984-5DA5-4E69-93B3-4A0A473755CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15D6B984-5DA5-4E69-93B3-4A0A473755CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{608EA62D-C4AF-406B-9A9E-302875C904A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{608EA62D-C4AF-406B-9A9E-302875C904A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{608EA62D-C4AF-406B-9A9E-302875C904A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{608EA62D-C4AF-406B-9A9E-302875C904A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
