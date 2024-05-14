@@ -53,7 +53,7 @@ namespace TasksManager.Tests
             var loginData = new LoginDto
             {
                 username = "userTest",
-                password = "userTest.123" //Password in correct format
+                password = "userTest.123"
             };
             _userBLMock.Setup(x => x.GetByUsernameAsync("userTest")).ReturnsAsync(_testUser);
 
@@ -71,7 +71,7 @@ namespace TasksManager.Tests
             var loginData = new LoginDto
             {
                 username = "userTest",
-                password = "otherPassword" //Password in incorrect format
+                password = "otherPassword"
             };
             _userBLMock.Setup(x => x.GetByUsernameAsync("userTest")).ReturnsAsync(_testUser);
 
@@ -85,7 +85,7 @@ namespace TasksManager.Tests
             var loginData2 = new LoginDto
             {
                 username = "otherUsername",
-                password = "userTest.123" //Password in incorrect format
+                password = "userTest.123" 
             };
             _userBLMock.Setup(x => x.GetByUsernameAsync("userTest")).ReturnsAsync(_testUser);
 
