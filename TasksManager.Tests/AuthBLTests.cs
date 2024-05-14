@@ -4,6 +4,7 @@ using Moq;
 using TasksManager.Application.BL;
 using TasksManager.Domain.DTO;
 using TasksManager.Domain.Entities;
+using TasksManager.Domain.Enum;
 using TasksManager.Domain.Interfaces.BL;
 
 namespace TasksManager.Tests
@@ -16,7 +17,7 @@ namespace TasksManager.Tests
 
         private AuthBL _authBL;
         private UserValidation _userValidation;
-        
+
         private Mock<IUserBL> _userBLMock;
 
         private User _testUser;
@@ -48,6 +49,7 @@ namespace TasksManager.Tests
         [Test]
         public async Task Login_ValidSuccess()
         {
+            //Arrange
             var loginData = new LoginDto
             {
                 username = "userTest",
@@ -55,14 +57,17 @@ namespace TasksManager.Tests
             };
             _userBLMock.Setup(x => x.GetByUsernameAsync("userTest")).ReturnsAsync(_testUser);
 
+            //Act
             var result = await _authBL.Login(loginData);
 
+            //Assert
             Assert.That(result, Is.Not.Null);
         }
 
         [Test]
         public async Task Login_InvalidPasswordOrUsername()
         {
+            //Arrange
             var loginData = new LoginDto
             {
                 username = "userTest",
@@ -70,10 +75,13 @@ namespace TasksManager.Tests
             };
             _userBLMock.Setup(x => x.GetByUsernameAsync("userTest")).ReturnsAsync(_testUser);
 
+            //Act
             var result = await _authBL.Login(loginData);
 
+            //Assert
             Assert.That(result, Is.Null);
 
+            //Arrange
             var loginData2 = new LoginDto
             {
                 username = "otherUsername",
@@ -81,9 +89,33 @@ namespace TasksManager.Tests
             };
             _userBLMock.Setup(x => x.GetByUsernameAsync("userTest")).ReturnsAsync(_testUser);
 
+            //Act
             var result2 = await _authBL.Login(loginData);
 
+            //Assert
             Assert.That(result2, Is.Null);
+        }
+
+        [Test]
+        public async Task SingUp_ValidSuccess()
+        {
+            //Arrange
+            var newUser = new UserDto
+            {
+                username = "userTest",
+                password = "userTest.123",
+                email = "userTest@userTest.com",
+                name = "Test",
+                role = ERole.User.ToString()
+            };
+            _userBLMock.Setup(x => x.CreateAsync(It.IsAny<UserDto>())).ReturnsAsync(_testUser);
+
+            //Act                
+            var result = await _authBL.SignUp(newUser);
+
+            //Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.password, Is.Null);
         }
 
     }
